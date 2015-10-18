@@ -396,9 +396,9 @@ namespace ts {
         }
     }
 
-    export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, options?: CompilerOptions): SourceFile {
+    export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
         let start = new Date().getTime();
-        let result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, options);
+        let result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes);
 
         parseTime += new Date().getTime() - start;
         return result;
@@ -526,10 +526,10 @@ namespace ts {
         // attached to the EOF token.
         let parseErrorBeforeNextFinishedNode = false;
 
-        export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean, options?: CompilerOptions): SourceFile {
+        export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
             initializeState(fileName, _sourceText, languageVersion, _syntaxCursor);
 
-            let result = parseSourceFileWorker(fileName, languageVersion, setParentNodes, options);
+            let result = parseSourceFileWorker(fileName, languageVersion, setParentNodes);
 
             clearState();
 
@@ -569,7 +569,7 @@ namespace ts {
             sourceText = undefined;
         }
 
-        function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean, options?: CompilerOptions): SourceFile {
+        function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean): SourceFile {
             sourceFile = createSourceFile(fileName, languageVersion);
 
             // Prime the scanner.
@@ -580,7 +580,7 @@ namespace ts {
             Debug.assert(token === SyntaxKind.EndOfFileToken);
             sourceFile.endOfFileToken = parseTokenNode();
 
-            setExternalModuleIndicator(sourceFile, options);
+            setExternalModuleIndicator(sourceFile);
 
             sourceFile.nodeCount = nodeCount;
             sourceFile.identifierCount = identifierCount;
@@ -5419,19 +5419,15 @@ namespace ts {
             sourceFile.moduleName = amdModuleName;
         }
 
-        function setExternalModuleIndicator(sourceFile: SourceFile, options?: CompilerOptions) {
-            if(options && options.noExternalModule) {
-                sourceFile.externalModuleIndicator = undefined;
-            } else {
-                sourceFile.externalModuleIndicator = forEach(sourceFile.statements, node =>
-                    node.flags & NodeFlags.Export
-                        || node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
-                        || node.kind === SyntaxKind.ImportDeclaration
-                        || node.kind === SyntaxKind.ExportAssignment
-                        || node.kind === SyntaxKind.ExportDeclaration
-                        ? node
-                        : undefined);
-            }
+        function setExternalModuleIndicator(sourceFile: SourceFile) {
+            sourceFile.externalModuleIndicator = forEach(sourceFile.statements, node =>
+                node.flags & NodeFlags.Export
+                    || node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
+                    || node.kind === SyntaxKind.ImportDeclaration
+                    || node.kind === SyntaxKind.ExportAssignment
+                    || node.kind === SyntaxKind.ExportDeclaration
+                    ? node
+                    : undefined);
         }
 
         const enum ParsingContext {

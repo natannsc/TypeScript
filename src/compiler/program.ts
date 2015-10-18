@@ -12,7 +12,7 @@ namespace ts {
 
     let emptyArray: any[] = [];
 
-    export const version = "1.7.0-dev.20151016";
+    export const version = "1.7.0";
 
     export function findConfigFile(searchPath: string): string {
         let fileName = "tsconfig.json";
@@ -235,7 +235,7 @@ namespace ts {
                 text = "";
             }
 
-            return text !== undefined ? createSourceFile(fileName, text, languageVersion, setParentNodes, options) : undefined;
+            return text !== undefined ? createSourceFile(fileName, text, languageVersion, setParentNodes) : undefined;
         }
 
         function directoryExists(directoryPath: string): boolean {
