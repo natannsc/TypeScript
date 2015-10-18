@@ -1,10 +1,9 @@
 {
-    "name": "typescript",
-    "author": "Microsoft Corp.",
-    "homepage": "http://typescriptlang.org/",
-    "version": "1.7.0",
+    "name": "ts-node-merging",
+    "author": "thr0wn",
+    "version": "0.1.1",
     "license": "Apache-2.0",
-    "description": "TypeScript is a language for application scale JavaScript development",
+    "description": "Enables declaration merging to node+typescript applications",
     "keywords": [
         "TypeScript",
         "Microsoft",
@@ -13,11 +12,11 @@
         "javascript"
     ],
     "bugs": {
-        "url": "https://github.com/Microsoft/TypeScript/issues"
+        "url": "https://github.com/thr0wn/TypeScript/issues"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/Microsoft/TypeScript.git"
+        "url": "https://github.com/thr0wn/TypeScript.git"
     },
     "main": "./lib/typescript.js",
     "typings": "./lib/typescript.d.ts",
