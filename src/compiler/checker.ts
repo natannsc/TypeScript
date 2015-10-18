@@ -13563,10 +13563,8 @@ namespace ts {
                 return false;
             }
             let inAmbientExternalModule = node.parent.kind === SyntaxKind.ModuleBlock && (<ModuleDeclaration>node.parent.parent).name.kind === SyntaxKind.StringLiteral;
-            if (node.parent.kind !== SyntaxKind.SourceFile && !inAmbientExternalModule) {
-                error(moduleName, node.kind === SyntaxKind.ExportDeclaration ?
-                    Diagnostics.Export_declarations_are_not_permitted_in_a_namespace :
-                    Diagnostics.Import_declarations_in_a_namespace_cannot_reference_a_module);
+            if (node.parent.kind !== SyntaxKind.SourceFile && !inAmbientExternalModule && node.kind === SyntaxKind.ExportDeclaration) {
+                error(moduleName, Diagnostics.Export_declarations_are_not_permitted_in_a_namespace);
                 return false;
             }
             if (inAmbientExternalModule && isExternalModuleNameRelative((<LiteralExpression>moduleName).text)) {

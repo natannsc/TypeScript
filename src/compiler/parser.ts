@@ -5420,14 +5420,7 @@ namespace ts {
         }
 
         function setExternalModuleIndicator(sourceFile: SourceFile) {
-            sourceFile.externalModuleIndicator = forEach(sourceFile.statements, node =>
-                node.flags & NodeFlags.Export
-                    || node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
-                    || node.kind === SyntaxKind.ImportDeclaration
-                    || node.kind === SyntaxKind.ExportAssignment
-                    || node.kind === SyntaxKind.ExportDeclaration
-                    ? node
-                    : undefined);
+            sourceFile.externalModuleIndicator = undefined;
         }
 
         const enum ParsingContext {
